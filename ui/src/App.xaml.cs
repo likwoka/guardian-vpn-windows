@@ -3,6 +3,10 @@
 // </copyright>
 
 using System.Windows;
+using System.Configuration;
+using System.Windows.Interop;
+using System.Windows.Media;
+
 
 namespace FirefoxPrivateNetwork
 {
@@ -22,6 +26,16 @@ namespace FirefoxPrivateNetwork
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
+            bool.TryParse(ConfigurationManager.AppSettings["ForceSoftwareRendering"], out bool shouldRenderInSoftware);
+            if (shouldRenderInSoftware)
+            {
+                RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly;
+            }
+            else
+            {
+                RenderOptions.ProcessRenderMode = RenderMode.Default;
+            }
+
             if (!Manager.MainWindowViewModel.RanOnStartup)
             {
                 var mainWindow = new UI.MainWindow();
